@@ -1,0 +1,2 @@
+# mercury
+A kafka project
