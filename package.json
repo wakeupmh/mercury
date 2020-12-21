@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "dev": "node src/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "kafkajs": "^1.15.0"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.2.40"
+  }
+}

@@ -1,39 +1,20 @@
 version: '2'
-
-networks:
-  kafka-net:
-    driver: bridge
-
 services:
-  zookeeper-server:
-    image: 'bitnami/zookeeper:latest'
-    networks:
-      - kafka-net
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
     ports:
-      - '2181:2181'
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-  kafka-server:
-    image: 'bitnami/kafka:latest'
-    networks:
-      - kafka-net    
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka:2.11-1.1.1
     ports:
-      - '9092:9092'
+      - "9092:9092"
+    links:
+      - zookeeper
     environment:
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-server:2181
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
-      - ALLOW_PLAINTEXT_LISTENER=yes
-    depends_on:
-      - zookeeper-server
-  kafka-server2:
-    image: 'bitnami/kafka:latest'
-    networks:
-      - kafka-net    
-    ports:
-      - '9093:9092'
-    environment:
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-server:2181
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9093
-      - ALLOW_PLAINTEXT_LISTENER=yes
-    depends_on:
-      - zookeeper-server
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_CREATE_TOPICS: "topic-test:1:1"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
