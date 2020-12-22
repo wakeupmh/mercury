@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   zookeeper:
     image: wurstmeister/zookeeper:latest
@@ -18,3 +18,24 @@ services:
       KAFKA_CREATE_TOPICS: "mercury-test:1:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - default
+  # nodejs:
+  #   build: .
+  #   volumes: 
+  #     - ./:/app
+  #     - /app/node_modules
+  #   ports:
+  #     - '8080:8080'
+  #   depends_on:
+  #     - zookeeper
+  #     - kafka
+  #   links:
+  #     - zookeeper
+  #     - kafka
+  #   environment:
+  #     BROKER_1: kafka:9092
+  #   networks:
+  #     - default
+networks:
+  default:
